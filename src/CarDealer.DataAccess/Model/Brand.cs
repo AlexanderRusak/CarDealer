@@ -2,9 +2,8 @@
 
 namespace CarDealer.DataAccess.Model
 {
-    public class Dealer : Entity
+    public class Brand : Entity
     {
         public string Name { get; set; }
-        public string Phone { get; set; }
     }
 }

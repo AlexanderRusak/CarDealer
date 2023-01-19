@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CarDealer.DataAccess.Model.Base;
 
 namespace CarDealer.DataAccess.Model
 {
-    public class Color:Base.Model
+    public class Color : Entity
     {
-        public string ColorName { get; set; }
+        public string Name { get; set; }
     }
 }

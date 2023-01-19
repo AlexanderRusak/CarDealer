@@ -21,7 +21,7 @@ namespace CarDealer.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("CarDealer.DataAccess.Model.CarModel", b =>
+            modelBuilder.Entity("CarDealer.DataAccess.Model.Brand", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -29,10 +29,27 @@ namespace CarDealer.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CarModelNameId")
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Brands");
+                });
+
+            modelBuilder.Entity("CarDealer.DataAccess.Model.Car", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("DealerId")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("BrandId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ColorId")
                         .HasColumnType("int");
 
                     b.Property<string>("Model")
@@ -41,28 +58,11 @@ namespace CarDealer.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CarModelNameId");
+                    b.HasIndex("BrandId");
 
-                    b.HasIndex("DealerId");
+                    b.HasIndex("ColorId");
 
-                    b.ToTable("CarModels");
-                });
-
-            modelBuilder.Entity("CarDealer.DataAccess.Model.CarModelName", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("CarModel")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CarModelNames");
+                    b.ToTable("Cars");
                 });
 
             modelBuilder.Entity("CarDealer.DataAccess.Model.Color", b =>
@@ -73,7 +73,7 @@ namespace CarDealer.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("ColorName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -90,11 +90,11 @@ namespace CarDealer.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("PhoneNumber")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SupplierName")
+                    b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -111,48 +111,29 @@ namespace CarDealer.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CarModelId")
+                    b.Property<int>("CarId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ColorId")
+                    b.Property<int>("DealerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Qty")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CarModelId");
+                    b.HasIndex("CarId");
 
-                    b.HasIndex("ColorId");
+                    b.HasIndex("DealerId");
 
                     b.ToTable("DealerCars");
                 });
 
-            modelBuilder.Entity("CarDealer.DataAccess.Model.CarModel", b =>
+            modelBuilder.Entity("CarDealer.DataAccess.Model.Car", b =>
                 {
-                    b.HasOne("CarDealer.DataAccess.Model.CarModelName", "CarModelName")
+                    b.HasOne("CarDealer.DataAccess.Model.Brand", "Brand")
                         .WithMany()
-                        .HasForeignKey("CarModelNameId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CarDealer.DataAccess.Model.Dealer", "Dealer")
-                        .WithMany()
-                        .HasForeignKey("DealerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CarModelName");
-
-                    b.Navigation("Dealer");
-                });
-
-            modelBuilder.Entity("CarDealer.DataAccess.Model.DealerCar", b =>
-                {
-                    b.HasOne("CarDealer.DataAccess.Model.CarModel", "CarModel")
-                        .WithMany()
-                        .HasForeignKey("CarModelId")
+                        .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -162,9 +143,28 @@ namespace CarDealer.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CarModel");
+                    b.Navigation("Brand");
 
                     b.Navigation("Color");
+                });
+
+            modelBuilder.Entity("CarDealer.DataAccess.Model.DealerCar", b =>
+                {
+                    b.HasOne("CarDealer.DataAccess.Model.Car", "Car")
+                        .WithMany()
+                        .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CarDealer.DataAccess.Model.Dealer", "Dealer")
+                        .WithMany()
+                        .HasForeignKey("DealerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Car");
+
+                    b.Navigation("Dealer");
                 });
 #pragma warning restore 612, 618
         }

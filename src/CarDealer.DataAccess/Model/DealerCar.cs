@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CarDealer.DataAccess.Model.Base;
 
 namespace CarDealer.DataAccess.Model
 {
-    public class DealerCar:Base.Model
+    public class DealerCar : Entity
     {
-
-        public int Qty { get; set; }
-
-        public CarModel CarModel { get; set; }
-        public Color Color { get; set; }
+        public decimal Price { get; set; }
+        public Dealer Dealer { get; set; }
+        public Car Car { get; set; }
     }
 }
